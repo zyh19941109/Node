@@ -2,26 +2,27 @@
 
 ### 初识node.js
 
-	NodeJS——后台
-	
-	JavaScript-前台
+		NodeJS——后台
 		
+		JavaScript-前台
+			
 		后台：
 		1.PHP
 		2.Java
 		3.Python
 		...
-		
-		优势
-		1.性能
-			nodejs	php		86
 			
-			有人大致做了测试，node的性能是php的86倍
+		优势：
 		
-		2.跟前台JS配合方便
-		
-		3.NodeJS便于前端学习
-		
+			1.性能
+				nodejs	php		86
+				
+				有人大致做了测试，node的性能是php的86倍
+			
+			2.跟前台JS配合方便
+			
+			3.NodeJS便于前端学习
+			
 		一些windows小操作：
 		
 			1.切换盘符	e:
