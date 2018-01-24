@@ -2,19 +2,21 @@
 
 ### 初识node.js
 
-		NodeJS——后台
+		NodeJS--后台
 		
-		JavaScript-前台
+		JavaScript--前台
 			
 		后台：
-		1.PHP
-		2.Java
-		3.Python
-		...
+		
+			1.PHP
+			2.Java
+			3.Python
+			...
 			
 		优势：
 		
 			1.性能
+			
 				nodejs	php		86
 				
 				有人大致做了测试，node的性能是php的86倍
@@ -31,9 +33,9 @@
 
 ### 创建一个简单的服务器
 
-		nodeJS——服务器
+		nodeJS--服务器
 		
-		http——协议
+		http--协议
 		
 		request	请求	输入-请求的信息
 		response	响应	输出-输出的东西
