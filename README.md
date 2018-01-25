@@ -31,7 +31,7 @@
 			2.改变目录	cd 目录名
 			3.执行程序	node xxx.js
 
-### 创建一个简单的服务器
+### 创建一个简单（low）的服务器
 
 		nodeJS--服务器
 		
@@ -60,5 +60,28 @@
 	server.listen(8080);
 ```
 
-### 文件操作--fs
+### 文件操作--fs（File System）
+
+		客户端--服务器--磁盘
+		
+		磁盘--服务器--客户端
+		
+		读取和写入都是异步操作
+		
+		fs.readFile(文件名,回调函数)
+		
+		fs.readFile('111.txt',function(err,data){
+			if(err){
+				console.log('读取失败')
+			}else{
+				//data读取出来为二进制数据，只限于机器机器之间的对接
+				console.log(data.toString)
+			}
+		})
+		
+		fs.writeFile(文件名,内容,回调函数)
+		
+		fs.writeFile('222.txt','zyh',function(err){
+			console.log(err)
+		})
 
