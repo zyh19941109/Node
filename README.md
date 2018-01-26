@@ -67,21 +67,22 @@
 		磁盘--服务器--客户端
 		
 		读取和写入都是异步操作
-		
-		fs.readFile(文件名,回调函数)
-		
-		fs.readFile('111.txt',function(err,data){
-			if(err){
-				console.log('读取失败')
-			}else{
-				//data读取出来为二进制数据，只限于机器机器之间的对接
-				console.log(data.toString)
-			}
-		})
-		
-		fs.writeFile(文件名,内容,回调函数)
-		
-		fs.writeFile('222.txt','zyh',function(err){
-			console.log(err)
-		})
 
+```javascript
+	//fs.readFile(文件名,回调函数)
+	
+	fs.readFile('111.txt',function(err,data){
+		if(err){
+			console.log('读取失败')
+		}else{
+			//data读取出来为二进制数据，只限于机器机器之间的对接
+			console.log(data.toString)
+		}
+	})
+	
+	//fs.writeFile(文件名,内容,回调函数)
+	
+	fs.writeFile('222.txt','zyh',function(err){
+		console.log(err)
+	})
+```
