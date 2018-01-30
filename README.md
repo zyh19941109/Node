@@ -132,7 +132,7 @@
 	}).listen(8080);
 ```
 
-> 2.querystring
+> 2.用用querystring
 
 ```javascript
 	const querystring=require('querystring');
@@ -147,19 +147,39 @@
 	
 	http.createServer(function (req, res){
 	  var getUrl={};
-	
 	  if(req.url.indexOf('?')!=-1){
 	    var arr=req.url.split('?');
 	    var url=arr[0];
-	    
 	    getUrl=querystring.parse(arr[1]);
 	  }else{
 	    var url=req.url;
 	  }
-	
-	
 	  console.log(url, getUrl);
+	  //req获取前台请求数据
+	  res.write('aaa');
+	  res.end();
+	}).listen(8080);
+```
+
+> 3.用用url
+
+```javascript
+	const urlData=require('url');
 	
+	var obj=urlData.parse("http://www.baidu.com/index?a=12&b=5", true);
+	console.log(obj.pathname, obj.query);
+```
+
+```javascript
+	const http=require('http');
+	const urlData=require('url');
+	
+	http.createServer(function (req, res){
+	  //不加true时query是字符串，加了true时，query解析为json
+	  var obj=urlData.parse(req.url, true);
+	  var url=obj.pathname;
+	  var getUrl=obj.query;
+	  console.log(url, getUrl);
 	  //req获取前台请求数据
 	  res.write('aaa');
 	  res.end();
