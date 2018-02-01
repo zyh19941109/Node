@@ -87,7 +87,7 @@
 	})
 ```
 
-### get地址栏参数解析
+### get参数解析
 
 ```html
 	<!DOCTYPE html>
