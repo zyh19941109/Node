@@ -185,3 +185,26 @@
 	  res.end();
 	}).listen(8080);
 ```
+### post数据获取
+
+		get数据：
+		
+			const urlData=require('url')
+			
+			urlData.parse(req.url, true)
+		
+		post数据接收：POST数据比GET大得多
+		
+			header => 头部 => get<32k
+			
+			content => 身体 => post<1G
+		
+			POST很大  =>  分段传输
+			
+				遇到网络环境不稳定的情况，如果不是分段传输，需要重新传输
+				而分段传输可确保只重新传输损坏的字节
+			
+				data	有一段数据到达触发一次（多次）
+				end	数据全部到达触发一次（一次）
+
+
