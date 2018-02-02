@@ -223,7 +223,7 @@
 	  //end——数据全部到达(一次)
 	  req.on('end', function (){
 	    var POST=querystring.parse(str);
-			console.log(POST);
+	    console.log(POST);
 	  });
 	}).listen(8080);
 ```
@@ -239,10 +239,10 @@
 	  </head>
 	  <body>
 	    <form action="http://localhost:8080/aaa" method="post">
-	      用户：<input type="text" name="user"><br>
-	      密码：<input type="password" name="pass"><br>
-	      <!--<textarea name="content" rows="8" cols="40"></textarea>-->
-	  		<input type="submit" value="提交">
+		用户：<input type="text" name="user"><br>
+		密码：<input type="password" name="pass"><br>
+		<!--<textarea name="content" rows="8" cols="40"></textarea>-->
+		<input type="submit" value="提交">
 	    </form>
 	  </body>
 	</html>
