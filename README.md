@@ -207,4 +207,81 @@
 				data	有一段数据到达触发一次（多次）
 				end	数据全部到达触发一次（一次）
 
+```javascript
+	const http=require('http');
+	const querystring=require('querystring');
+	
+	http.createServer(function (req, res){
+	  //POST——req
+	  var str='';//接收数据
+	  //data——有一段数据到达(很多次)
+	  var i=0;
+	  req.on('data', function (data){
+	    console.log(`第${i++}次收到数据`);
+	    str+=data;
+	  });
+	  //end——数据全部到达(一次)
+	  req.on('end', function (){
+	    var POST=querystring.parse(str);
+			console.log(POST);
+	  });
+	}).listen(8080);
+```
 
+### 综合小例子
+
+```html
+	<!DOCTYPE html>
+	<html>
+	  <head>
+	    <meta charset="utf-8">
+	    <title></title>
+	  </head>
+	  <body>
+	    <form action="http://localhost:8080/aaa" method="post">
+	      用户：<input type="text" name="user"><br>
+	      密码：<input type="password" name="pass"><br>
+	      <!--<textarea name="content" rows="8" cols="40"></textarea>-->
+	  		<input type="submit" value="提交">
+	    </form>
+	  </body>
+	</html>
+```
+
+```javascript
+	const http=require('http');
+	const fs=require('fs');
+	const urlData=require('url');//针对get
+	const querystring=require('querystring');//针对post
+	
+	var server=http.createServer(function (req, res){
+	  //GET
+	  var obj=urlData.parse(req.url, true);
+	
+	  var url=obj.pathname;
+	  const GET=obj.query;
+	
+	  //POST
+	  var str='';
+	  req.on('data', function (data){
+	    str+=data;
+	  });
+	  
+	  req.on('end', function (){
+	    const POST=querystring.parse(str);
+			//console.log(url,GET,POST)
+	    //文件请求
+	    var file_name='./www'+url;
+	    fs.readFile(file_name, function (err, data){
+	      if(err){
+	        res.write('404');
+	      }else{
+	        res.write(data);
+	      }
+	      res.end();
+	    });
+	  });
+	});
+	
+	server.listen(8080);
+```

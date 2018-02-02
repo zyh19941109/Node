@@ -13,6 +13,6 @@ http.createServer(function (req, res){
   //end——数据全部到达(一次)
   req.on('end', function (){
     var POST=querystring.parse(str);
-    console.log(POST);
+		console.log(POST);
   });
 }).listen(8080);
