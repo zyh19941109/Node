@@ -112,7 +112,7 @@
 	const http=require('http');
 	
 	http.createServer(function (req, res){
-	  var getUrl={};
+	  var GET={};
 	  //防止favicon报错，做判断处理
 	  if(req.url.indexOf('?')!=-1){
 	    var arr=req.url.split('?');
@@ -120,12 +120,12 @@
 	    var arr2=arr[1].split('&');
 	    for(var i=0;i<arr2.length;i++){
 	      var arr3=arr2[i].split('=');
-	      getUrl[arr3[0]]=arr3[1];
+	      GET[arr3[0]]=arr3[1];
 	    }
 	  }else{
 	    var url=req.url;
 	  }
-	  console.log(url, getUrl);
+	  console.log(url, GET);
 	  //req获取前台请求数据
 	  res.write('aaa');
 	  res.end();
@@ -146,15 +146,15 @@
 	const querystring=require('querystring');
 	
 	http.createServer(function (req, res){
-	  var getUrl={};
+	  var GET={};
 	  if(req.url.indexOf('?')!=-1){
 	    var arr=req.url.split('?');
 	    var url=arr[0];
-	    getUrl=querystring.parse(arr[1]);
+	    GET=querystring.parse(arr[1]);
 	  }else{
 	    var url=req.url;
 	  }
-	  console.log(url, getUrl);
+	  console.log(url, GET);
 	  //req获取前台请求数据
 	  res.write('aaa');
 	  res.end();
@@ -178,8 +178,8 @@
 	  //不加true时query是字符串，加了true时，query解析为json
 	  var obj=urlData.parse(req.url, true);
 	  var url=obj.pathname;
-	  var getUrl=obj.query;
-	  console.log(url, getUrl);
+	  var GET=obj.query;
+	  console.log(url, GET);
 	  //req获取前台请求数据
 	  res.write('aaa');
 	  res.end();
@@ -280,6 +280,140 @@
 	      }
 	      res.end();
 	    });
+	  });
+	});
+	
+	server.listen(8080);
+```
+
+### 简单的登录、注册
+
+```html
+	<!DOCTYPE html>
+	<html>
+	  <head>
+	    <meta charset="utf-8">
+	    <title></title>
+	    <script src="ajax.js" charset="utf-8"></script>
+	    <script type="text/javascript">
+	      window.onload=function (){
+	        var oTxtUser=document.getElementById('user');
+	        var oTxtPass=document.getElementById('pass');
+	        var oBtnReg=document.getElementById('reg_btn');
+	        var oBtnLogin=document.getElementById('login_btn');
+	
+	        oBtnLogin.onclick=function (){
+	          ajax({
+	            url: '/user',
+	            data: {act: 'login', user: oTxtUser.value, pass: oTxtPass.value},
+	            type: 'get',
+	            success: function (str){
+	              var json=eval('('+str+')');
+	
+	              if(json.ok){
+	                alert('登录成功');
+	              }else{
+	                alert('登录失败：'+json.msg);
+	              }
+	            },
+	            error: function (){
+	              alert('通信错误');
+	            }
+	          });
+	        };
+	
+	        oBtnReg.onclick=function (){
+	          ajax({
+	            url: '/user',
+	            data: {act: 'reg', user: oTxtUser.value, pass: oTxtPass.value},
+	            type: 'get',
+	            success: function (str){
+	              var json=eval('('+str+')');
+	
+	              if(json.ok){
+	                alert('注册成功');
+	              }else{
+	                alert('注册失败：'+json.msg);
+	              }
+	            },
+	            error: function (){
+	              alert('通信错误');
+	            }
+	          });
+	        };
+	      };
+	    </script>
+	  </head>
+	  <body>
+	    用户：<input type="text" id="user"><br>
+	    密码：<input type="password" id="pass"><br>
+	    <input type="button" value="注册" id="reg_btn">
+	    <input type="button" value="登录" id="login_btn">
+	  </body>
+	</html>
+```
+
+```javascript
+	const http=require('http');
+	const fs=require('fs');
+	const querystring=require('querystring');
+	const urlLib=require('url');
+	
+	var users={};   //{"zyh": "123456", "yanhui": "123456"}
+	
+	var server=http.createServer(function (req, res){
+	  //解析数据
+	  var str='';
+	  req.on('data', function (data){
+	    str+=data;
+	  });
+	  req.on('end', function (){
+	    var obj=urlLib.parse(req.url, true);
+	
+	    const url=obj.pathname;
+	    const GET=obj.query;
+	    const POST=querystring.parse(str);
+	
+	    //区分——接口、文件
+	    if(url=='/user'){//接口
+	      switch(GET.act){
+	        case 'reg':
+	          //1.检查用户名是否已经有了
+	          if(users[GET.user]){
+	            res.write('{"ok": false, "msg": "此用户已存在"}');
+	          }else{
+	            //2.插入users
+	            users[GET.user]=GET.pass;
+	            res.write('{"ok": true, "msg": "注册成功"}');
+	          }
+	          break;
+	        case 'login':
+	          //1.检查用户是否存在
+	          if(users[GET.user]==null){
+	            res.write('{"ok": false, "msg": "此用户不存在"}');
+	          //2.检查用户密码
+	          }else if(users[GET.user]!=GET.pass){
+	            res.write('{"ok": false, "msg": "用户名或密码有误"}');
+	          }else{
+	            res.write('{"ok": true, "msg": "登录成功"}');
+	          }
+	          break;
+	        default:
+	          res.write('{"ok": false, "msg": "未知的act"}');
+	      }
+	      res.end();
+	    }else{//文件
+	      //读取文件
+	      var file_name='./www'+url;
+	      fs.readFile(file_name, function (err, data){
+	        if(err){
+	          res.write('404');
+	        }else{
+	          res.write(data);
+	        }
+	        res.end();
+	      });
+	    }
 	  });
 	});
 	
